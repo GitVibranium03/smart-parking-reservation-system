@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartPark | Parking Ticket</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <header>
+
+        <nav class="navbar">
+
+            <div class="logo">
+                Smart<span>Park</span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="booking.html">Book Parking</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Ticket Section -->
+
+    <section class="ticket-section">
+
+        <div class="ticket-container">
+
+            <div class="ticket-header">
+
+                <h1>SmartPark</h1>
+
+                <p>Parking Ticket</p>
+
+            </div>
+
+
+            <div class="ticket-status">
+                CONFIRMED
+            </div>
+
+
+            <div class="ticket-details">
+
+                <div class="ticket-row">
+                    <span>Booking ID</span>
+                    <strong id="ticketBookingId">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Vehicle Number</span>
+                    <strong id="ticketVehicleNumber">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Vehicle Type</span>
+                    <strong id="ticketVehicleType">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Parking Slot</span>
+                    <strong id="ticketSlot">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Booking Date</span>
+                    <strong id="ticketDate">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Entry Time</span>
+                    <strong id="ticketEntryTime">-</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Exit Time</span>
+                    <strong id="ticketExitTime">-</strong>
+                </div>
+
+            </div>
+
+
+            <div class="ticket-actions">
+
+                <button
+                    type="button"
+                    class="print-btn"
+                    onclick="window.print()"
+                >
+                    Print Ticket
+                </button>
+
+                <a
+                    href="booking.html"
+                    class="new-booking-btn"
+                >
+                    New Booking
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <p>
+            © 2026 SmartPark. Online Parking Reservation System.
+        </p>
+
+    </footer>
+
+
+    <script src="js/ticket.js"></script>
+
+</body>
+
+</html>

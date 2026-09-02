@@ -1,0 +1,768 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #222;
+}
+
+/* Navigation */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 8%;
+
+  background-color: #1e293b;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+}
+
+.logo span {
+  color: #38bdf8;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #38bdf8;
+}
+
+/* Hero Section */
+
+.hero {
+  min-height: 500px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px 10%;
+
+  background-color: #e0f2fe;
+}
+
+.hero-content {
+  max-width: 750px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 1.6;
+
+  margin-bottom: 30px;
+
+  color: #475569;
+}
+
+/* Buttons */
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 22px;
+
+  text-decoration: none;
+
+  border-radius: 6px;
+
+  font-weight: bold;
+}
+
+.primary-btn {
+  background-color: #0284c7;
+  color: white;
+}
+
+.primary-btn:hover {
+  background-color: #0369a1;
+}
+
+.secondary-btn {
+  background-color: white;
+  color: #0284c7;
+
+  border: 1px solid #0284c7;
+}
+
+/* Features */
+
+.features {
+  padding: 70px 10%;
+
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 32px;
+
+  margin-bottom: 40px;
+}
+
+.feature-container {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 25px;
+
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  width: 280px;
+
+  padding: 25px;
+
+  background-color: white;
+
+  border-radius: 10px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+  margin-bottom: 15px;
+}
+
+.feature-card p {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Footer */
+
+footer {
+  background-color: #1e293b;
+
+  color: white;
+
+  text-align: center;
+
+  padding: 20px;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-links {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* =========================
+   Registration Page
+   ========================= */
+
+.register-section {
+  min-height: calc(100vh - 140px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 50px 20px;
+
+  background-color: #f1f5f9;
+}
+
+.register-container {
+  width: 100%;
+  max-width: 500px;
+
+  background-color: white;
+
+  padding: 35px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.register-container h1 {
+  text-align: center;
+
+  margin-bottom: 10px;
+}
+
+.register-subtitle {
+  text-align: center;
+
+  color: #64748b;
+
+  margin-bottom: 30px;
+}
+
+/* Form */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 6px;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #0284c7;
+}
+
+/* Register Button */
+
+.register-btn {
+  width: 100%;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background-color: #0284c7;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.register-btn:hover {
+  background-color: #0369a1;
+}
+
+/* Login Link */
+
+.login-link {
+  text-align: center;
+
+  margin-top: 20px;
+
+  color: #64748b;
+}
+
+.login-link a {
+  color: #0284c7;
+
+  text-decoration: none;
+
+  font-weight: bold;
+}
+
+/* =========================
+   Login Page
+   ========================= */
+
+.login-section {
+  min-height: calc(100vh - 140px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 50px 20px;
+
+  background-color: #f1f5f9;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+
+  background-color: white;
+
+  padding: 40px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+  text-align: center;
+
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  text-align: center;
+
+  color: #64748b;
+
+  margin-bottom: 30px;
+}
+
+/* Login Button */
+
+.login-btn {
+  width: 100%;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background-color: #0284c7;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #0369a1;
+}
+
+/* Register Link */
+
+.register-link {
+  text-align: center;
+
+  margin-top: 20px;
+
+  color: #64748b;
+}
+
+.register-link a {
+  color: #0284c7;
+
+  text-decoration: none;
+
+  font-weight: bold;
+}
+
+/* =========================
+   Booking Page
+   ========================= */
+
+.booking-section {
+  min-height: calc(100vh - 140px);
+
+  padding: 50px 20px;
+
+  background-color: #f1f5f9;
+}
+
+.booking-container {
+  width: 100%;
+  max-width: 750px;
+
+  margin: auto;
+
+  background-color: white;
+
+  padding: 40px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.booking-container h1 {
+  text-align: center;
+
+  margin-bottom: 10px;
+}
+
+.booking-subtitle {
+  text-align: center;
+
+  color: #64748b;
+
+  margin-bottom: 30px;
+}
+
+/* Parking Slots */
+
+.slot-heading {
+  margin-top: 30px;
+  margin-bottom: 20px;
+
+  font-size: 22px;
+}
+
+.parking-slots {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.parking-slot {
+  height: 70px;
+
+  border-radius: 8px;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  border: 2px solid;
+}
+
+/* Available */
+
+.parking-slot.available {
+  background-color: #dcfce7;
+
+  border-color: #22c55e;
+
+  color: #166534;
+}
+
+/* Available Hover */
+
+.parking-slot.available:hover {
+  background-color: #bbf7d0;
+}
+
+/* Selected */
+
+.parking-slot.selected {
+  background-color: #0284c7;
+
+  border-color: #0369a1;
+
+  color: white;
+}
+
+/* Occupied */
+
+.parking-slot.occupied {
+  background-color: #fee2e2;
+
+  border-color: #ef4444;
+
+  color: #991b1b;
+
+  cursor: not-allowed;
+}
+
+/* Selected Slot */
+
+.selected-slot {
+  margin: 20px 0;
+
+  font-size: 16px;
+}
+
+#selectedSlot {
+  color: #0284c7;
+}
+
+/* Booking Button */
+
+.booking-btn {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background-color: #0284c7;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.booking-btn:hover {
+  background-color: #0369a1;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .booking-container {
+    padding: 25px;
+  }
+
+  .parking-slots {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================
+   Ticket Page
+   ========================= */
+
+.ticket-section {
+  min-height: calc(100vh - 140px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 50px 20px;
+
+  background-color: #f1f5f9;
+}
+
+.ticket-container {
+  width: 100%;
+  max-width: 550px;
+
+  background-color: white;
+
+  border-radius: 10px;
+
+  padding: 35px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Ticket Header */
+
+.ticket-header {
+  text-align: center;
+
+  border-bottom: 2px dashed #cbd5e1;
+
+  padding-bottom: 20px;
+
+  margin-bottom: 20px;
+}
+
+.ticket-header h1 {
+  font-size: 32px;
+
+  color: #0284c7;
+}
+
+.ticket-header p {
+  margin-top: 5px;
+
+  color: #64748b;
+
+  font-size: 18px;
+}
+
+/* Status */
+
+.ticket-status {
+  width: fit-content;
+
+  margin: 0 auto 25px;
+
+  padding: 8px 18px;
+
+  border-radius: 20px;
+
+  background-color: #dcfce7;
+
+  color: #166534;
+
+  font-weight: bold;
+}
+
+/* Ticket Details */
+
+.ticket-details {
+  border-bottom: 2px dashed #cbd5e1;
+
+  padding-bottom: 20px;
+}
+
+.ticket-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ticket-row span {
+  color: #64748b;
+}
+
+.ticket-row strong {
+  color: #1e293b;
+
+  text-align: right;
+}
+
+/* Buttons */
+
+.ticket-actions {
+  display: flex;
+
+  gap: 15px;
+
+  margin-top: 25px;
+}
+
+.print-btn,
+.new-booking-btn {
+  flex: 1;
+
+  padding: 12px;
+
+  border-radius: 6px;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  text-decoration: none;
+}
+
+.print-btn {
+  border: none;
+
+  background-color: #0284c7;
+
+  color: white;
+}
+
+.print-btn:hover {
+  background-color: #0369a1;
+}
+
+.new-booking-btn {
+  border: 1px solid #0284c7;
+
+  color: #0284c7;
+
+  background-color: white;
+}
+
+.new-booking-btn:hover {
+  background-color: #e0f2fe;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .ticket-container {
+    padding: 25px;
+  }
+
+  .ticket-row {
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .ticket-row strong {
+    text-align: left;
+  }
+
+  .ticket-actions {
+    flex-direction: column;
+  }
+}
+
+/* Print */
+
+@media print {
+  .navbar,
+  footer,
+  .ticket-actions {
+    display: none;
+  }
+
+  .ticket-section {
+    background-color: white;
+
+    padding: 0;
+  }
+
+  .ticket-container {
+    box-shadow: none;
+
+    max-width: 100%;
+  }
+}

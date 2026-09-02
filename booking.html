@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartPark | Book Parking</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <header>
+
+        <nav class="navbar">
+
+            <div class="logo">
+                Smart<span>Park</span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="booking.html">Book Parking</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Booking Section -->
+
+    <section class="booking-section">
+
+        <div class="booking-container">
+
+            <h1>Book Your Parking Slot</h1>
+
+            <p class="booking-subtitle">
+                Enter your vehicle and booking details.
+            </p>
+
+
+            <form id="bookingForm">
+
+                <!-- Vehicle Number -->
+
+                <div class="form-group">
+
+                    <label for="vehicleNumber">
+                        Vehicle Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="vehicleNumber"
+                        name="vehicleNumber"
+                        placeholder="Example: MH12AB1234"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Vehicle Type -->
+
+                <div class="form-group">
+
+                    <label for="vehicleType">
+                        Vehicle Type
+                    </label>
+
+                    <select
+                        id="vehicleType"
+                        name="vehicleType"
+                        required
+                    >
+
+                        <option value="">
+                            Select vehicle type
+                        </option>
+
+                        <option value="car">
+                            Car
+                        </option>
+
+                        <option value="bike">
+                            Bike
+                        </option>
+
+                        <option value="scooter">
+                            Scooter
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Booking Date -->
+
+                <div class="form-group">
+
+                    <label for="bookingDate">
+                        Booking Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="bookingDate"
+                        name="bookingDate"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Entry Time -->
+
+                <div class="form-group">
+
+                    <label for="entryTime">
+                        Entry Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="entryTime"
+                        name="entryTime"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Exit Time -->
+
+                <div class="form-group">
+
+                    <label for="exitTime">
+                        Expected Exit Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="exitTime"
+                        name="exitTime"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Parking Slots -->
+
+                <h2 class="slot-heading">
+                    Select Parking Slot
+                </h2>
+
+
+                <div class="parking-slots">
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="A1"
+                    >
+                        A1
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="A2"
+                    >
+                        A2
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot occupied"
+                        disabled
+                    >
+                        A3
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="A4"
+                    >
+                        A4
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="B1"
+                    >
+                        B1
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot occupied"
+                        disabled
+                    >
+                        B2
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="B3"
+                    >
+                        B3
+                    </button>
+
+                    <button
+                        type="button"
+                        class="parking-slot available"
+                        data-slot="B4"
+                    >
+                        B4
+                    </button>
+
+                </div>
+
+
+                <!-- Selected Slot -->
+
+                <p class="selected-slot">
+
+                    Selected Slot:
+                    <strong id="selectedSlot">
+                        None
+                    </strong>
+
+                </p>
+
+
+                <!-- Confirm -->
+
+                <button
+                    type="submit"
+                    class="booking-btn"
+                >
+                    Confirm Booking
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            © 2026 SmartPark. Online Parking Reservation System.
+        </p>
+
+    </footer>
+
+
+    <script src="js/booking.js"></script>
+
+</body>
+
+</html>
