@@ -14,3 +14,6 @@ bin/
 
 # Environment/config files
 .env
+
+# Local database configuration
+backend/config.properties

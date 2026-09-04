@@ -1,60 +1,41 @@
 package backend;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Properties;
 
 public class DatabaseConnection {
 
-    public static void main(String[] args) {
+    private static final String CONFIG_FILE = "config.properties";
 
-        String url = "jdbc:oracle:thin:@localhost:1521:xe";
-        String username = "SCOTT";
-        String password = "TIGER";
+    public static Connection getConnection() throws SQLException {
 
-        try {
+        Properties properties = new Properties();
 
-            Connection connection
-                    = DriverManager.getConnection(url, username, password);
+        try (FileInputStream input =
+                     new FileInputStream(CONFIG_FILE)) {
 
-            System.out.println("Database connected successfully!");
+            properties.load(input);
 
-            String sql = "SELECT * FROM users";
+        } catch (IOException e) {
 
-            Statement statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            System.out.println("\nUsers:");
-
-            while (resultSet.next()) {
-
-                int userId = resultSet.getInt("user_id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String phone = resultSet.getString("phone");
-
-                System.out.println(
-                        userId + " | "
-                        + name + " | "
-                        + email + " | "
-                        + phone
-                );
-            }
-
-            resultSet.close();
-            statement.close();
-            connection.close();
-
-            System.out.println("\nDatabase connection closed.");
-
-        } catch (SQLException e) {
-
-            System.out.println("Database operation failed!");
-
-            e.printStackTrace();
+            throw new SQLException(
+                    "Could not load database configuration.",
+                    e
+            );
         }
+
+        String url = properties.getProperty("db.url");
+        String username = properties.getProperty("db.username");
+        String password = properties.getProperty("db.password");
+
+        return DriverManager.getConnection(
+                url,
+                username,
+                password
+        );
     }
 }
