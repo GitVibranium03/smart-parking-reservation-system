@@ -9,6 +9,39 @@ import java.sql.Timestamp;
 
 public class BookingDAO {
 
+    public boolean isSlotAvailable(int slotId) {
+
+        String sql = """
+            SELECT status
+            FROM parking_slots
+            WHERE slot_id = ?
+            """;
+
+        try (
+                Connection connection
+                = DatabaseConnection.getConnection(); PreparedStatement statement
+                = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, slotId);
+
+            ResultSet resultSet
+                    = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return "AVAILABLE".equals(
+                        resultSet.getString("status")
+                );
+            }
+
+            return false;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public void getUserBookings(int userId) {
 
         String sql = """
