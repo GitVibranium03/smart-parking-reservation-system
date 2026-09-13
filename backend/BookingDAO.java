@@ -9,6 +9,26 @@ import java.sql.Timestamp;
 
 public class BookingDAO {
 
+    public static void main(String[] args) {
+
+        BookingDAO bookingDAO = new BookingDAO();
+
+        boolean result = bookingDAO.createBooking(
+                22,
+                6,
+                7,
+                Date.valueOf("2026-09-13"),
+                Timestamp.valueOf("2026-09-13 15:00:00"),
+                Timestamp.valueOf("2026-09-13 16:00:00")
+        );
+
+        if (result) {
+            System.out.println("Booking created successfully!");
+        } else {
+            System.out.println("Booking creation failed!");
+        }
+    }
+
     public boolean isSlotAvailable(int slotId) {
 
         String sql = """
@@ -97,33 +117,105 @@ public class BookingDAO {
             Timestamp entryTime,
             Timestamp exitTime) {
 
-        String sql = """
-                INSERT INTO bookings
-                (user_id, vehicle_id, slot_id,
-                 booking_date, entry_time, exit_time)
-                VALUES (?, ?, ?, ?, ?, ?)
+        String bookingSql = """
+            INSERT INTO bookings
+            (user_id, vehicle_id, slot_id,
+             booking_date, entry_time, exit_time)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+        String slotSql = """
+            UPDATE parking_slots
+            SET status = 'OCCUPIED'
+            WHERE slot_id = ?
+            AND status = 'AVAILABLE'
+            """;
+
+        Connection connection = null;
+
+        try {
+
+            connection = DatabaseConnection.getConnection();
+
+            // Start transaction
+            connection.setAutoCommit(false);
+
+            // 1. Check slot availability
+            String checkSql = """
+                SELECT status
+                FROM parking_slots
+                WHERE slot_id = ?
+                FOR UPDATE
                 """;
 
-        try (
-                Connection connection
-                = DatabaseConnection.getConnection(); PreparedStatement statement
-                = connection.prepareStatement(sql)) {
+            try (PreparedStatement checkStatement
+                    = connection.prepareStatement(checkSql)) {
 
-            statement.setInt(1, userId);
-            statement.setInt(2, vehicleId);
-            statement.setInt(3, slotId);
-            statement.setDate(4, bookingDate);
-            statement.setTimestamp(5, entryTime);
-            statement.setTimestamp(6, exitTime);
+                checkStatement.setInt(1, slotId);
 
-            int rowsInserted = statement.executeUpdate();
+                ResultSet resultSet
+                        = checkStatement.executeQuery();
 
-            return rowsInserted > 0;
+                if (!resultSet.next()
+                        || !"AVAILABLE".equals(
+                                resultSet.getString("status"))) {
+
+                    connection.rollback();
+                    return false;
+                }
+            }
+
+            // 2. Create booking
+            try (PreparedStatement bookingStatement
+                    = connection.prepareStatement(bookingSql)) {
+
+                bookingStatement.setInt(1, userId);
+                bookingStatement.setInt(2, vehicleId);
+                bookingStatement.setInt(3, slotId);
+                bookingStatement.setDate(4, bookingDate);
+                bookingStatement.setTimestamp(5, entryTime);
+                bookingStatement.setTimestamp(6, exitTime);
+
+                bookingStatement.executeUpdate();
+            }
+
+            // 3. Mark slot as occupied
+            try (PreparedStatement slotStatement
+                    = connection.prepareStatement(slotSql)) {
+
+                slotStatement.setInt(1, slotId);
+
+                slotStatement.executeUpdate();
+            }
+
+            // 4. Commit both operations
+            connection.commit();
+
+            return true;
 
         } catch (SQLException e) {
 
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+
             e.printStackTrace();
             return false;
+
+        } finally {
+
+            try {
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
