@@ -9,6 +9,77 @@ import java.sql.Timestamp;
 
 public class BookingDAO {
 
+    public void getBookingById(int bookingId) {
+
+        String sql = """
+            SELECT
+                b.booking_id,
+                b.user_id,
+                v.vehicle_number,
+                v.vehicle_type,
+                p.slot_number,
+                b.booking_date,
+                b.entry_time,
+                b.exit_time,
+                b.status
+            FROM bookings b
+            JOIN vehicles v
+                ON b.vehicle_id = v.vehicle_id
+            JOIN parking_slots p
+                ON b.slot_id = p.slot_id
+            WHERE b.booking_id = ?
+            """;
+
+        try (
+                Connection connection
+                = DatabaseConnection.getConnection(); PreparedStatement statement
+                = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, bookingId);
+
+            ResultSet resultSet
+                    = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                System.out.println("Booking ID: "
+                        + resultSet.getInt("booking_id"));
+
+                System.out.println("User ID: "
+                        + resultSet.getInt("user_id"));
+
+                System.out.println("Vehicle: "
+                        + resultSet.getString("vehicle_number"));
+
+                System.out.println("Vehicle Type: "
+                        + resultSet.getString("vehicle_type"));
+
+                System.out.println("Parking Slot: "
+                        + resultSet.getString("slot_number"));
+
+                System.out.println("Booking Date: "
+                        + resultSet.getDate("booking_date"));
+
+                System.out.println("Entry Time: "
+                        + resultSet.getTimestamp("entry_time"));
+
+                System.out.println("Exit Time: "
+                        + resultSet.getTimestamp("exit_time"));
+
+                System.out.println("Status: "
+                        + resultSet.getString("status"));
+
+            } else {
+
+                System.out.println("Booking not found.");
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
 
         BookingDAO bookingDAO = new BookingDAO();
