@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 
 public class SmartParkServer {
 
@@ -21,36 +22,70 @@ public class SmartParkServer {
             String response =
                     "SmartPark API is running";
 
-            exchange.sendResponseHeaders(
-                    200,
-                    response.length()
-            );
-
-            try (OutputStream output =
-                         exchange.getResponseBody()) {
-
-                output.write(
-                        response.getBytes()
-                );
-            }
+            sendResponse(exchange, 200, response);
         });
 
         // Login API
         server.createContext("/login", exchange -> {
 
-            String response =
-                    "Login API is working";
+            // Only POST requests are allowed
+            if (!exchange.getRequestMethod()
+                    .equalsIgnoreCase("POST")) {
 
-            exchange.sendResponseHeaders(
-                    200,
-                    response.length()
+                sendResponse(
+                        exchange,
+                        405,
+                        "Only POST method is allowed"
+                );
+
+                return;
+            }
+
+            // Read request body
+            String requestBody =
+                    new String(
+                            exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8
+                    );
+
+            System.out.println(
+                    "Login request: " + requestBody
             );
 
-            try (OutputStream output =
-                         exchange.getResponseBody()) {
+            // Extract email and password
+            String[] loginData =
+                    requestBody.split("&");
 
-                output.write(
-                        response.getBytes()
+            String email =
+                    loginData[0].split("=")[1];
+
+            String password =
+                    loginData[1].split("=")[1];
+
+            // Call UserDAO
+            UserDAO userDAO =
+                    new UserDAO();
+
+            boolean loginSuccessful =
+                    userDAO.loginUser(
+                            email,
+                            password
+                    );
+
+            if (loginSuccessful) {
+
+                sendResponse(
+                        exchange,
+                        200,
+                        "Login successful"
+                );
+
+            } else {
+
+                sendResponse(
+                        exchange,
+                        401,
+                        "Invalid email or password"
                 );
             }
         });
@@ -60,5 +95,26 @@ public class SmartParkServer {
         System.out.println(
                 "SmartPark API started on port 8081"
         );
+    }
+
+    // Common response method
+    private static void sendResponse(
+            com.sun.net.httpserver.HttpExchange exchange,
+            int statusCode,
+            String response) throws IOException {
+
+        byte[] responseBytes =
+                response.getBytes(StandardCharsets.UTF_8);
+
+        exchange.sendResponseHeaders(
+                statusCode,
+                responseBytes.length
+        );
+
+        try (OutputStream output =
+                     exchange.getResponseBody()) {
+
+            output.write(responseBytes);
+        }
     }
 }
