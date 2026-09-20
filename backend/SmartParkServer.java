@@ -4,14 +4,15 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 public class SmartParkServer {
 
     public static void main(String[] args) throws IOException {
 
-        HttpServer server =
-                HttpServer.create(
+        HttpServer server
+                = HttpServer.create(
                         new InetSocketAddress(8081),
                         0
                 );
@@ -19,8 +20,8 @@ public class SmartParkServer {
         // Home API
         server.createContext("/", exchange -> {
 
-            String response =
-                    "SmartPark API is running";
+            String response
+                    = "SmartPark API is running";
 
             sendResponse(exchange, 200, response);
         });
@@ -42,8 +43,8 @@ public class SmartParkServer {
             }
 
             // Read request body
-            String requestBody =
-                    new String(
+            String requestBody
+                    = new String(
                             exchange.getRequestBody().readAllBytes(),
                             StandardCharsets.UTF_8
                     );
@@ -53,21 +54,27 @@ public class SmartParkServer {
             );
 
             // Extract email and password
-            String[] loginData =
-                    requestBody.split("&");
+            String[] loginData
+                    = requestBody.split("&");
 
-            String email =
-                    loginData[0].split("=")[1];
+            String email
+                    = URLDecoder.decode(
+                            loginData[0].split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
 
-            String password =
-                    loginData[1].split("=")[1];
+            String password
+                    = URLDecoder.decode(
+                            loginData[1].split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
 
             // Call UserDAO
-            UserDAO userDAO =
-                    new UserDAO();
+            UserDAO userDAO
+                    = new UserDAO();
 
-            boolean loginSuccessful =
-                    userDAO.loginUser(
+            boolean loginSuccessful
+                    = userDAO.loginUser(
                             email,
                             password
                     );
@@ -103,16 +110,31 @@ public class SmartParkServer {
             int statusCode,
             String response) throws IOException {
 
-        byte[] responseBytes =
-                response.getBytes(StandardCharsets.UTF_8);
+        byte[] responseBytes
+                = response.getBytes(StandardCharsets.UTF_8);
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Origin",
+                "*"
+        );
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Methods",
+                "GET, POST, OPTIONS"
+        );
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Headers",
+                "Content-Type"
+        );
 
         exchange.sendResponseHeaders(
                 statusCode,
                 responseBytes.length
         );
 
-        try (OutputStream output =
-                     exchange.getResponseBody()) {
+        try (OutputStream output
+                = exchange.getResponseBody()) {
 
             output.write(responseBytes);
         }
