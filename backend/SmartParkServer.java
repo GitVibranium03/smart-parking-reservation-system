@@ -23,7 +23,11 @@ public class SmartParkServer {
             String response
                     = "SmartPark API is running";
 
-            sendResponse(exchange, 200, response);
+            sendResponse(
+                    exchange,
+                    200,
+                    response
+            );
         });
 
         // Login API
@@ -97,6 +101,97 @@ public class SmartParkServer {
             }
         });
 
+        // Registration API
+        server.createContext("/register", exchange -> {
+
+            // Only POST requests are allowed
+            if (!exchange.getRequestMethod()
+                    .equalsIgnoreCase("POST")) {
+
+                sendResponse(
+                        exchange,
+                        405,
+                        "Only POST method is allowed"
+                );
+
+                return;
+            }
+
+            // Read request body
+            String requestBody
+                    = new String(
+                            exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8
+                    );
+
+            System.out.println(
+                    "Registration request: "
+                    + requestBody
+            );
+
+            // Extract registration data
+            String[] registrationData
+                    = requestBody.split("&");
+
+            String name
+                    = URLDecoder.decode(
+                            registrationData[0]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            String email
+                    = URLDecoder.decode(
+                            registrationData[1]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            String phone
+                    = URLDecoder.decode(
+                            registrationData[2]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            String password
+                    = URLDecoder.decode(
+                            registrationData[3]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            // Call UserDAO
+            UserDAO userDAO
+                    = new UserDAO();
+
+            boolean registrationSuccessful
+                    = userDAO.insertUser(
+                            name,
+                            email,
+                            password,
+                            phone
+                    );
+
+            if (registrationSuccessful) {
+
+                sendResponse(
+                        exchange,
+                        201,
+                        "Registration successful"
+                );
+
+            } else {
+
+                sendResponse(
+                        exchange,
+                        400,
+                        "Registration failed"
+                );
+            }
+        });
+
+        // Start server
         server.start();
 
         System.out.println(
@@ -111,8 +206,11 @@ public class SmartParkServer {
             String response) throws IOException {
 
         byte[] responseBytes
-                = response.getBytes(StandardCharsets.UTF_8);
+                = response.getBytes(
+                        StandardCharsets.UTF_8
+                );
 
+        // CORS headers
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Origin",
                 "*"
@@ -128,6 +226,7 @@ public class SmartParkServer {
                 "Content-Type"
         );
 
+        // Send HTTP response
         exchange.sendResponseHeaders(
                 statusCode,
                 responseBytes.length
