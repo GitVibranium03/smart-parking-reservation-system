@@ -33,7 +33,6 @@ public class SmartParkServer {
         // Login API
         server.createContext("/login", exchange -> {
 
-            // Only POST requests are allowed
             if (!exchange.getRequestMethod()
                     .equalsIgnoreCase("POST")) {
 
@@ -46,7 +45,6 @@ public class SmartParkServer {
                 return;
             }
 
-            // Read request body
             String requestBody
                     = new String(
                             exchange.getRequestBody().readAllBytes(),
@@ -57,7 +55,6 @@ public class SmartParkServer {
                     "Login request: " + requestBody
             );
 
-            // Extract email and password
             String[] loginData
                     = requestBody.split("&");
 
@@ -73,7 +70,6 @@ public class SmartParkServer {
                             StandardCharsets.UTF_8
                     );
 
-            // Call UserDAO
             UserDAO userDAO
                     = new UserDAO();
 
@@ -104,7 +100,6 @@ public class SmartParkServer {
         // Registration API
         server.createContext("/register", exchange -> {
 
-            // Only POST requests are allowed
             if (!exchange.getRequestMethod()
                     .equalsIgnoreCase("POST")) {
 
@@ -117,7 +112,6 @@ public class SmartParkServer {
                 return;
             }
 
-            // Read request body
             String requestBody
                     = new String(
                             exchange.getRequestBody().readAllBytes(),
@@ -129,7 +123,6 @@ public class SmartParkServer {
                     + requestBody
             );
 
-            // Extract registration data
             String[] registrationData
                     = requestBody.split("&");
 
@@ -161,19 +154,55 @@ public class SmartParkServer {
                             StandardCharsets.UTF_8
                     );
 
-            // Call UserDAO
+            String vehicleNumber
+                    = URLDecoder.decode(
+                            registrationData[4]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            String vehicleType
+                    = URLDecoder.decode(
+                            registrationData[5]
+                                    .split("=", 2)[1],
+                            StandardCharsets.UTF_8
+                    );
+
+            // Create user
             UserDAO userDAO
                     = new UserDAO();
 
-            boolean registrationSuccessful
-                    = userDAO.insertUser(
+            int userId
+                    = userDAO.insertUserAndGetId(
                             name,
                             email,
                             password,
                             phone
                     );
 
-            if (registrationSuccessful) {
+            if (userId == -1) {
+
+                sendResponse(
+                        exchange,
+                        400,
+                        "User registration failed"
+                );
+
+                return;
+            }
+
+            // Create vehicle
+            VehicleDAO vehicleDAO
+                    = new VehicleDAO();
+
+            boolean vehicleAdded
+                    = vehicleDAO.addVehicle(
+                            userId,
+                            vehicleNumber,
+                            vehicleType.toUpperCase()
+                    );
+
+            if (vehicleAdded) {
 
                 sendResponse(
                         exchange,
@@ -186,7 +215,7 @@ public class SmartParkServer {
                 sendResponse(
                         exchange,
                         400,
-                        "Registration failed"
+                        "User created, but vehicle registration failed"
                 );
             }
         });
@@ -210,7 +239,7 @@ public class SmartParkServer {
                         StandardCharsets.UTF_8
                 );
 
-        // CORS headers
+        // CORS
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Origin",
                 "*"
@@ -226,7 +255,6 @@ public class SmartParkServer {
                 "Content-Type"
         );
 
-        // Send HTTP response
         exchange.sendResponseHeaders(
                 statusCode,
                 responseBytes.length

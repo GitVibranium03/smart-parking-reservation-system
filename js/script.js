@@ -49,33 +49,32 @@ if (registerForm) {
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
     const password = document.getElementById("password").value;
-    const confirmPassword =
-      document.getElementById("confirmPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
     // Check password confirmation
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
+    const vehicleNumber = document.getElementById("vehicleNumber").value;
 
+    const vehicleType = document.getElementById("vehicleType").value;
     try {
-      const response = await fetch(
-        "http://localhost:8081/register",
-        {
-          method: "POST",
+      const response = await fetch("http://localhost:8081/register", {
+        method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/x-www-form-urlencoded",
-          },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
 
-          body:
-            `name=${encodeURIComponent(name)}` +
-            `&email=${encodeURIComponent(email)}` +
-            `&phone=${encodeURIComponent(phone)}` +
-            `&password=${encodeURIComponent(password)}`,
-        }
-      );
+        body:
+          `name=${encodeURIComponent(name)}` +
+          `&email=${encodeURIComponent(email)}` +
+          `&phone=${encodeURIComponent(phone)}` +
+          `&password=${encodeURIComponent(password)}` +
+          `&vehicleNumber=${encodeURIComponent(vehicleNumber)}` +
+          `&vehicleType=${encodeURIComponent(vehicleType)}`,
+      });
 
       const message = await response.text();
 
@@ -93,9 +92,7 @@ if (registerForm) {
     } catch (error) {
       console.error("Registration error:", error);
 
-      alert(
-        "Unable to connect to SmartPark server."
-      );
+      alert("Unable to connect to SmartPark server.");
     }
   });
 }

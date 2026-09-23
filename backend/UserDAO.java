@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
+    // Existing registration method
     public boolean insertUser(
             String name,
             String email,
@@ -21,7 +22,9 @@ public class UserDAO {
 
         try (
                 Connection connection
-                = DatabaseConnection.getConnection(); PreparedStatement statement
+                = DatabaseConnection.getConnection();
+
+                PreparedStatement statement
                 = connection.prepareStatement(sql)) {
 
             statement.setString(1, name);
@@ -29,7 +32,8 @@ public class UserDAO {
             statement.setString(3, password);
             statement.setString(4, phone);
 
-            int rowsInserted = statement.executeUpdate();
+            int rowsInserted =
+                    statement.executeUpdate();
 
             return rowsInserted > 0;
 
@@ -40,35 +44,99 @@ public class UserDAO {
         }
     }
 
-    public boolean loginUser(String email, String password) {
 
-        String sql = """
-            SELECT user_id, name
-            FROM users
-            WHERE email = ?
-            AND password = ?
-            """;
+    // Registration method that returns generated USER_ID
+    public int insertUserAndGetId(
+            String name,
+            String email,
+            String password,
+            String phone) {
+
+        String insertSql = """
+                INSERT INTO users
+                (name, email, password, phone)
+                VALUES (?, ?, ?, ?)
+                """;
+
+        String selectSql = """
+                SELECT user_id
+                FROM users
+                WHERE email = ?
+                """;
 
         try (
                 Connection connection
-                = DatabaseConnection.getConnection(); PreparedStatement statement
+                = DatabaseConnection.getConnection();
+
+                PreparedStatement insertStatement
+                = connection.prepareStatement(insertSql)) {
+
+            insertStatement.setString(1, name);
+            insertStatement.setString(2, email);
+            insertStatement.setString(3, password);
+            insertStatement.setString(4, phone);
+
+            int rowsInserted =
+                    insertStatement.executeUpdate();
+
+            if (rowsInserted == 0) {
+                return -1;
+            }
+
+            try (
+                    PreparedStatement selectStatement
+                    = connection.prepareStatement(selectSql)) {
+
+                selectStatement.setString(1, email);
+
+                ResultSet resultSet =
+                        selectStatement.executeQuery();
+
+                if (resultSet.next()) {
+
+                    return resultSet.getInt("user_id");
+                }
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+
+    // Login method
+    public boolean loginUser(
+            String email,
+            String password) {
+
+        String sql = """
+                SELECT user_id, name
+                FROM users
+                WHERE email = ?
+                AND password = ?
+                """;
+
+        try (
+                Connection connection
+                = DatabaseConnection.getConnection();
+
+                PreparedStatement statement
                 = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);
             statement.setString(2, password);
 
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet =
+                    statement.executeQuery();
 
             if (resultSet.next()) {
 
-                // System.out.println(
-                //         "Login successful! Welcome "
-                //         + resultSet.getString("name")
-                // );
                 return true;
             }
 
-            // System.out.println("Invalid email or password.");
             return false;
 
         } catch (SQLException e) {
@@ -78,27 +146,29 @@ public class UserDAO {
         }
     }
 
+
     public static void main(String[] args) {
 
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO =
+                new UserDAO();
 
-        boolean result = userDAO.loginUser(
-                "amit@gmail.com",
-                "test123"
-        );
+        boolean result =
+                userDAO.loginUser(
+                        "amit@gmail.com",
+                        "test123"
+                );
 
-        // boolean result = userDAO.insertUser(
-        //         "vinay s",
-        //         "vs@gmail.com",
-        //         "test123",
-        //         "4654865484"
-        // );
         if (result) {
-            System.out.println("Login successful!");
-            // System.out.println("User registered successfully!");
+
+            System.out.println(
+                    "Login successful!"
+            );
+
         } else {
-            System.out.println("Login failed!");
-            // System.out.println("User registration failed!");
+
+            System.out.println(
+                    "Login failed!"
+            );
         }
     }
 }
