@@ -168,41 +168,21 @@ public class SmartParkServer {
                             StandardCharsets.UTF_8
                     );
 
-            // Create user
-            UserDAO userDAO
-                    = new UserDAO();
+            // Transactional registration
+            RegistrationDAO registrationDAO
+                    = new RegistrationDAO();
 
-            int userId
-                    = userDAO.insertUserAndGetId(
+            boolean registrationSuccessful
+                    = registrationDAO.registerUserWithVehicle(
                             name,
                             email,
                             password,
-                            phone
-                    );
-
-            if (userId == -1) {
-
-                sendResponse(
-                        exchange,
-                        400,
-                        "User registration failed"
-                );
-
-                return;
-            }
-
-            // Create vehicle
-            VehicleDAO vehicleDAO
-                    = new VehicleDAO();
-
-            boolean vehicleAdded
-                    = vehicleDAO.addVehicle(
-                            userId,
+                            phone,
                             vehicleNumber,
                             vehicleType.toUpperCase()
                     );
 
-            if (vehicleAdded) {
+            if (registrationSuccessful) {
 
                 sendResponse(
                         exchange,
@@ -215,7 +195,7 @@ public class SmartParkServer {
                 sendResponse(
                         exchange,
                         400,
-                        "User created, but vehicle registration failed"
+                        "Registration failed. User and vehicle were not created."
                 );
             }
         });
